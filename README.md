@@ -8,7 +8,7 @@ Weather app using Vue.js, Google Maps Geocoding, and Dark Sky.
 
 ``` bash
 # clone repo and API submodule
-git clone https://github.com/krestaino/weather-vue.git --recursive
+git clone git@github.com:joshsisley/vue-weather.git --recursive
 
 # to fetch submodule if already cloned without the `--recursive` flag
 git submodule update --init
