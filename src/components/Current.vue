@@ -51,66 +51,72 @@
 </template>
 
 <script>
-  import WeatherIcon from './WeatherIcon'
-  import moment from 'moment'
-  import 'moment-timezone'
+import WeatherIcon from './WeatherIcon';
+import moment from 'moment';
+import 'moment-timezone';
 
-  export default {
-    name: 'current',
-    components: {
-      WeatherIcon
-    },
-    computed: {
-      dewPointLabel () {
-        switch (this.store.units) {
-          case 'us':
-            return 'F'
-          case 'si':
-            return 'C'
-        }
-      },
-      store () {
-        return this.$store.state
-      },
-      visibilityLabel () {
-        switch (this.store.units) {
-          case 'us':
-            return 'miles'
-          case 'si':
-            return 'km'
-        }
-      },
-      windSpeedLabel () {
-        switch (this.store.units) {
-          case 'us':
-            return 'mph'
-          case 'si':
-            return 'kph'
-        }
+export default {
+  name: 'current',
+  components: {
+    WeatherIcon
+  },
+  computed: {
+    dewPointLabel () {
+      switch (this.store.units) {
+        case 'us':
+          return 'F';
+        case 'si':
+          return 'C';
       }
     },
-
-    methods: {
-      changeUnits (units) {
-        this.$store.dispatch('units', units)
-        this.$store.dispatch('appStatus', {state: 'loading'})
-        this.$store.dispatch('weather').then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
-      },
-      date (time, zone) {
-        return moment(time).tz(zone).format('dddd, MMMM Do')
-      },
-      timestamp (time, zone) {
-        return moment(time).tz(zone).format('h:mm A')
-      },
-      toPercentage (value) {
-        return Math.round(value * 100)
+    store () {
+      return this.$store.state;
+    },
+    visibilityLabel () {
+      switch (this.store.units) {
+        case 'us':
+          return 'miles';
+        case 'si':
+          return 'km';
+      }
+    },
+    windSpeedLabel () {
+      switch (this.store.units) {
+        case 'us':
+          return 'mph';
+        case 'si':
+          return 'kph';
       }
     }
+  },
+
+  methods: {
+    changeUnits (units) {
+      this.$store.dispatch('units', units);
+      this.$store.dispatch('appStatus', { state: 'loading' });
+      this.$store
+        .dispatch('weather')
+        .then(() => this.$store.dispatch('appStatus', { state: 'loaded' }));
+    },
+    date (time, zone) {
+      return moment(time)
+        .tz(zone)
+        .format('dddd, MMMM Do');
+    },
+    timestamp (time, zone) {
+      return moment(time)
+        .tz(zone)
+        .format('h:mm A');
+    },
+    toPercentage (value) {
+      return Math.round(value * 100);
+    }
   }
+};
 </script>
 
 <style lang="scss">
-@import '../scss/_vars.scss';
+@import "../scss/_vars.scss";
 
 .current {
   font-size: 20px;
@@ -122,7 +128,7 @@
       padding-top: 16px;
     }
 
-    @media(max-width: 850px) {
+    @media (max-width: 850px) {
       flex-direction: column;
     }
 
@@ -139,12 +145,12 @@
 
     div span {
       &::after {
-        content: ', '
+        content: ", ";
       }
 
       &:last-child {
         &::after {
-          content: ''
+          content: "";
         }
       }
     }
@@ -227,7 +233,7 @@
     line-height: 1;
     padding-top: 8px;
 
-    @media(max-width: 850px) {
+    @media (max-width: 850px) {
       padding-top: 0;
     }
 
@@ -236,7 +242,7 @@
       text-align: right;
       width: 50%;
 
-      @media(max-width: 850px) {
+      @media (max-width: 850px) {
         margin-top: 8px;
         text-align: left;
       }

@@ -1,27 +1,20 @@
 // http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
-  root: true,
-  parser: 'babel-eslint',
-  parserOptions: {
-    sourceType: 'module'
-  },
-  env: {
-    browser: true,
-  },
-  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: 'standard',
-  // required to lint *.vue files
-  plugins: [
-    'html'
+  extends: [
+    // add more generic rulesets here, such as:
+    // 'eslint:recommended',
+    'standard',
+    'plugin:vue/essential'
   ],
-  // add your custom rules here
-  'rules': {
-    // allow paren-less arrow functions
-    'arrow-parens': 0,
-    // allow async-await
-    'generator-star-spacing': 0,
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+  rules: {
+    // override/add rules settings here, such as:
+    // 'vue/no-unused-vars': 'error'
+    "semi": [2, "always"],
+    indent: 0,
+    "no-tabs": 0,
+    "eol-last": "off",
+    "generator-star-spacing": 0,
+    "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0
   }
 }

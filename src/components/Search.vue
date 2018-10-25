@@ -33,113 +33,119 @@
 </template>
 
 <script>
-  // eslint-disable-next-line no-unused-vars
-  import arrive from 'arrive'
-  import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg'
-  import IconLocationSearch from '../assets/icons/ui/location_searching.svg'
-  import IconLocationLock from '../assets/icons/ui/my_location.svg'
-  import IconSearch from '../assets/icons/ui/search.svg'
-  import IconClear from '../assets/icons/ui/clear.svg'
-  import VueGoogleAutocomplete from 'vue-google-autocomplete'
+// eslint-disable-next-line no-unused-vars
+import arrive from 'arrive';
+import IconLocationDisabled from '../assets/icons/ui/location_disabled.svg';
+import IconLocationSearch from '../assets/icons/ui/location_searching.svg';
+import IconLocationLock from '../assets/icons/ui/my_location.svg';
+import IconSearch from '../assets/icons/ui/search.svg';
+import IconClear from '../assets/icons/ui/clear.svg';
+import VueGoogleAutocomplete from 'vue-google-autocomplete';
 
-  export default {
-    name: 'search',
-    components: {
-      IconLocationDisabled,
-      IconLocationSearch,
-      IconLocationLock,
-      IconSearch,
-      IconClear,
-      VueGoogleAutocomplete
+export default {
+  name: 'search',
+  components: {
+    IconLocationDisabled,
+    IconLocationSearch,
+    IconLocationLock,
+    IconSearch,
+    IconClear,
+    VueGoogleAutocomplete
+  },
+  computed: {
+    formattedAddress() {
+      return this.store.geocode.formattedAddress;
     },
-    computed: {
-      formattedAddress () {
-        return this.store.geocode.formattedAddress
-      },
-      store () {
-        return this.$store.state
-      }
+    store() {
+      return this.$store.state;
+    }
+  },
+  data() {
+    return {
+      inputQueryFocus: false
+    };
+  },
+  methods: {
+    clearInputQuery() {
+      let inputQueryDOM = document.querySelector('#inputQuery');
+      inputQueryDOM.value = '';
+      inputQueryDOM.focus();
+      this.$store.dispatch('inputQuery', null);
     },
-    data () {
-      return {
-        inputQueryFocus: false
-      }
+    movePacContainer(addressData) {
+      document.arrive('.pac-container', function() {
+        document.querySelector('.search-box').appendChild(this);
+      });
     },
-    methods: {
-      clearInputQuery () {
-        let inputQueryDOM = document.querySelector('#inputQuery')
-        inputQueryDOM.value = ''
-        inputQueryDOM.focus()
-        this.$store.dispatch('inputQuery', null)
-      },
-      movePacContainer (addressData) {
-        document.arrive('.pac-container', function () {
-          document.querySelector('.search-box').appendChild(this)
-        })
-      },
-      browerGeolocation () {
-        return new Promise((resolve, reject) => {
-          if (!navigator.geolocation) {
-            this.$store.dispatch('appStatus', {
-              state: 'error',
-              message: 'Unfortunately, your device does not support geolocation. No problem though. Search away.'
-            })
-            return
-          }
-          let success = position => {
-            this.$store.dispatch('locationIcon', 'lock')
-            this.$store.dispatch('coordinates', {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            })
-            resolve()
-          }
-          let error = () => {
-            this.$store.dispatch('locationIcon', 'disabled')
-            this.$store.dispatch('appStatus', {
-              state: 'error',
-              message: 'No geolocation? No problem. Search away.'
-            })
-          }
-          navigator.geolocation.getCurrentPosition(success, error)
-        })
-      },
-      findLocation () {
-        document.querySelector('#inputQuery').value = ''
-        this.$store.dispatch('inputQuery', null)
-        this.$store.dispatch('appStatus', {state: 'loading'})
-        this.getBrowserLocation()
-      },
-      getBrowserLocation () {
-        this.browerGeolocation().then(() => {
-          this.$store.dispatch('geocode', 'default').then(() => {
-            this.$store.dispatch('weather')
-              .then(() => this.$store.dispatch('appStatus', {state: 'loaded'}))
-          })
-        })
-      },
-      getInputQuery (addressData, placeResultData) {
-        let query = (placeResultData)
-          ? query = placeResultData.formatted_address
-          : query = document.querySelector('#inputQuery').value
-        this.$store.dispatch('inputQuery', query)
-        this.$store.dispatch('locationIcon', 'search')
-        this.$store.dispatch('appStatus', {state: 'loading'})
-        this.$store.dispatch('geocode', 'reverse')
-          .then(() => this.$store.dispatch('weather')
-            .then(() => this.$store.dispatch('appStatus', {state: 'loaded'})))
-      }
+    browerGeolocation() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          this.$store.dispatch('appStatus', {
+            state: 'error',
+            message:
+              'Unfortunately, your device does not support geolocation. No problem though. Search away.'
+          });
+          return;
+        }
+        let success = position => {
+          this.$store.dispatch('locationIcon', 'lock');
+          this.$store.dispatch('coordinates', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+          resolve();
+        };
+        let error = () => {
+          this.$store.dispatch('locationIcon', 'disabled');
+          this.$store.dispatch('appStatus', {
+            state: 'error',
+            message: 'No geolocation? No problem. Search away.'
+          });
+        };
+        navigator.geolocation.getCurrentPosition(success, error);
+      });
     },
-    mounted () {
-      this.movePacContainer()
-      this.getBrowserLocation()
+    findLocation() {
+      document.querySelector('#inputQuery').value = '';
+      this.$store.dispatch('inputQuery', null);
+      this.$store.dispatch('appStatus', { state: 'loading' });
+      this.getBrowserLocation();
     },
-    watch: {
-      formattedAddress () {
-        document.title = `${this.store.geocode.formattedAddress} | Weather Vue`
-      }
+    getBrowserLocation() {
+      this.browerGeolocation().then(() => {
+        this.$store.dispatch('geocode', 'default').then(() => {
+          this.$store
+            .dispatch('weather')
+            .then(() => this.$store.dispatch('appStatus', { state: 'loaded' }));
+        });
+      });
+    },
+    getInputQuery(addressData, placeResultData) {
+      let query = placeResultData
+        ? (query = placeResultData.formatted_address)
+        : (query = document.querySelector('#inputQuery').value);
+      this.$store.dispatch('inputQuery', query);
+      this.$store.dispatch('locationIcon', 'search');
+      this.$store.dispatch('appStatus', { state: 'loading' });
+      this.$store
+        .dispatch('geocode', 'reverse')
+        .then(() =>
+          this.$store
+            .dispatch('weather')
+            .then(() => this.$store.dispatch('appStatus', { state: 'loaded' }))
+        );
+    }
+  },
+  mounted() {
+    this.movePacContainer();
+    this.getBrowserLocation();
+  },
+  watch: {
+    formattedAddress() {
+      document.title = `${this.store.geocode.formattedAddress} | Weather Vue`;
     }
   }
+};
 </script>
 
 <style lang="scss">
@@ -151,7 +157,7 @@
   position: relative;
   z-index: 1;
 
-  @media(max-width: 850px) {
+  @media (max-width: 850px) {
     margin-bottom: 16px;
 
     &.focus {
@@ -195,7 +201,7 @@
         visibility: visible;
       }
 
-      @media(max-width: 850px) {
+      @media (max-width: 850px) {
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
       }
@@ -215,7 +221,7 @@
       top: 100% !important;
       width: 100% !important;
 
-      @media(max-width: 550px) {
+      @media (max-width: 550px) {
         margin-left: 0;
         width: calc(100% + 110px) !important;
       }
@@ -231,7 +237,7 @@
         cursor: pointer;
         padding: 8px 16px;
 
-        @media(max-width: 850px) {
+        @media (max-width: 850px) {
           padding: 16px;
         }
 
@@ -270,7 +276,7 @@
     margin: 0;
     margin-left: 15px;
 
-    @media(max-width: 850px) {
+    @media (max-width: 850px) {
       border: 1px solid #bbb;
       border-left: 0;
       border-radius: 0;

@@ -34,57 +34,61 @@
 </template>
 
 <script>
-  import Background from './components/Background'
-  import Search from './components/Search'
-  import Current from './components/Current'
-  import Forecast from './components/Forecast'
-  import Credits from './components/Credits'
-  import IconRefresh from './assets/icons/ui/refresh.svg'
-  import IconHelp from './assets/icons/ui/help.svg'
-  import moment from 'moment'
-  import 'moment-timezone'
+import Background from './components/Background';
+import Search from './components/Search';
+import Current from './components/Current';
+import Forecast from './components/Forecast';
+import Credits from './components/Credits';
+import IconRefresh from './assets/icons/ui/refresh.svg';
+import IconHelp from './assets/icons/ui/help.svg';
+import moment from 'moment';
+import 'moment-timezone';
 
-  export default {
-    name: 'app',
-    components: {
-      Background,
-      Search,
-      Current,
-      Forecast,
-      Credits,
-      IconRefresh,
-      IconHelp
-    },
-    computed: {
-      store () {
-        return this.$store.state
-      }
-    },
-    methods: {
-      credits () {
-        (this.store.appStatus.state === 'credits')
-          ? this.$store.dispatch('appStatus', {state: 'loaded'})
-          : this.$store.dispatch('appStatus', {state: 'credits'})
-      },
-      fetchWeather () {
-        this.$store.dispatch('appStatus', {state: 'loading'})
-        this.$store.dispatch('weather').then(() => {
-          this.$store.dispatch('appStatus', {state: 'loaded'})
-        })
-      },
-      timestamp (time, zone) {
-        return moment(time).tz(zone).format('h:mm A')
-      }
-    },
-    mounted () {
-      (localStorage.units) ? this.$store.dispatch('units', localStorage.getItem('units')) : null
+export default {
+  name: 'app',
+  components: {
+    Background,
+    Search,
+    Current,
+    Forecast,
+    Credits,
+    IconRefresh,
+    IconHelp
+  },
+  computed: {
+    store () {
+      return this.$store.state;
     }
+  },
+  methods: {
+    credits () {
+      this.store.appStatus.state === 'credits'
+        ? this.$store.dispatch('appStatus', { state: 'loaded' })
+        : this.$store.dispatch('appStatus', { state: 'credits' });
+    },
+    fetchWeather () {
+      this.$store.dispatch('appStatus', { state: 'loading' });
+      this.$store.dispatch('weather').then(() => {
+        this.$store.dispatch('appStatus', { state: 'loaded' });
+      });
+    },
+    timestamp (time, zone) {
+      return moment(time)
+        .tz(zone)
+        .format('h:mm A');
+    }
+  },
+  mounted () {
+    localStorage.units
+      ? this.$store.dispatch('units', localStorage.getItem('units'))
+      : null;
   }
+};
 </script>
 
 <style lang="scss">
-@import 'scss/_base.scss';
-@import 'scss/partials/_spinner.scss';
+@import "scss/_base.scss";
+@import "scss/partials/_spinner.scss";
 #app {
   align-items: center;
   display: flex;
@@ -92,7 +96,7 @@
   height: 100%;
   justify-content: center;
 
-  @media(max-width: 850px) {
+  @media (max-width: 850px) {
     height: initial;
   }
 }
@@ -100,7 +104,7 @@
 .weather-card {
   background-color: #fbfbfb;
   border-radius: 3px;
-  box-shadow: 0px 0px 150px 0px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 150px 0px rgba(0, 0, 0, 0.5);
   color: #383842;
   display: flex;
   flex-direction: column;
@@ -117,14 +121,14 @@
     flex-direction: column;
   }
 
-  @media(max-width: 850px) {
+  @media (max-width: 850px) {
     border-radius: 0;
     margin: 32px;
     max-width: 500px;
     padding: 16px;
   }
 
-  @media(max-width: 550px) {
+  @media (max-width: 550px) {
     box-shadow: none;
     margin: 0;
     max-width: 100%;
@@ -137,7 +141,7 @@
   padding-bottom: 16px;
   position: relative;
 
-  @media(max-width: 850px) {
+  @media (max-width: 850px) {
     padding-bottom: 48px;
   }
 
@@ -194,7 +198,7 @@
   justify-content: space-between;
   left: 0;
   margin: 0;
-  opacity: .75;
+  opacity: 0.75;
   padding: 10px;
   position: absolute;
   width: 100%;

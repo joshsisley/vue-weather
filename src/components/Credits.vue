@@ -20,10 +20,10 @@ export default {
   name: 'credits',
   computed: {
     store () {
-      return this.$store.state
+      return this.$store.state;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
