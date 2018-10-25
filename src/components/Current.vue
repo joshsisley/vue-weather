@@ -61,7 +61,7 @@ export default {
     WeatherIcon
   },
   computed: {
-    dewPointLabel () {
+    dewPointLabel() {
       switch (this.store.units) {
         case 'us':
           return 'F';
@@ -69,10 +69,10 @@ export default {
           return 'C';
       }
     },
-    store () {
+    store() {
       return this.$store.state;
     },
-    visibilityLabel () {
+    visibilityLabel() {
       switch (this.store.units) {
         case 'us':
           return 'miles';
@@ -80,7 +80,7 @@ export default {
           return 'km';
       }
     },
-    windSpeedLabel () {
+    windSpeedLabel() {
       switch (this.store.units) {
         case 'us':
           return 'mph';
@@ -91,24 +91,24 @@ export default {
   },
 
   methods: {
-    changeUnits (units) {
+    changeUnits(units) {
       this.$store.dispatch('units', units);
       this.$store.dispatch('appStatus', { state: 'loading' });
       this.$store
         .dispatch('weather')
         .then(() => this.$store.dispatch('appStatus', { state: 'loaded' }));
     },
-    date (time, zone) {
+    date(time, zone) {
       return moment(time)
         .tz(zone)
         .format('dddd, MMMM Do');
     },
-    timestamp (time, zone) {
+    timestamp(time, zone) {
       return moment(time)
         .tz(zone)
         .format('h:mm A');
     },
-    toPercentage (value) {
+    toPercentage(value) {
       return Math.round(value * 100);
     }
   }

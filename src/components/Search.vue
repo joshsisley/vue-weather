@@ -149,7 +149,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../scss/_vars.scss';
+@import "../scss/_vars.scss";
 .search {
   display: flex;
   flex-direction: row;

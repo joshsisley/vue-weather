@@ -8,12 +8,12 @@ import loadGoogleMapsAPI from 'load-google-maps-api';
 export default {
   name: 'background',
   computed: {
-    haveCoordinates () {
+    haveCoordinates() {
       return (
         this.store.coordinates.latitude && this.store.coordinates.longitude
       );
     },
-    isLoaded () {
+    isLoaded() {
       if (
         this.store.appStatus.state === 'loaded' ||
         this.store.appStatus.state === 'credits'
@@ -21,12 +21,12 @@ export default {
         return true;
       }
     },
-    store () {
+    store() {
       return this.$store.state;
     }
   },
   methods: {
-    map () {
+    map() {
       /* eslint-disable no-new, no-undef */
       var map = new google.maps.Map(document.getElementById('map'), {
         center: {
@@ -53,7 +53,7 @@ export default {
 
       marker.setMap(map);
     },
-    googleMaps () {
+    googleMaps() {
       const options = {
         key: process.env.API_KEY.google,
         libraries: ['places']
@@ -63,11 +63,11 @@ export default {
         .catch(err => console.error(err));
     }
   },
-  mounted () {
+  mounted() {
     this.googleMaps();
   },
   watch: {
-    isLoaded () {
+    isLoaded() {
       this.store.googleMapsLoaded && window.innerWidth > 550
         ? this.map()
         : null;

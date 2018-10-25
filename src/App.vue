@@ -56,29 +56,29 @@ export default {
     IconHelp
   },
   computed: {
-    store () {
+    store() {
       return this.$store.state;
     }
   },
   methods: {
-    credits () {
+    credits() {
       this.store.appStatus.state === 'credits'
         ? this.$store.dispatch('appStatus', { state: 'loaded' })
         : this.$store.dispatch('appStatus', { state: 'credits' });
     },
-    fetchWeather () {
+    fetchWeather() {
       this.$store.dispatch('appStatus', { state: 'loading' });
       this.$store.dispatch('weather').then(() => {
         this.$store.dispatch('appStatus', { state: 'loaded' });
       });
     },
-    timestamp (time, zone) {
+    timestamp(time, zone) {
       return moment(time)
         .tz(zone)
         .format('h:mm A');
     }
   },
-  mounted () {
+  mounted() {
     localStorage.units
       ? this.$store.dispatch('units', localStorage.getItem('units'))
       : null;

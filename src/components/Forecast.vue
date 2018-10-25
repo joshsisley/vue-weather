@@ -22,15 +22,15 @@ export default {
     WeatherIcon
   },
   computed: {
-    store () {
+    store() {
       return this.$store.state;
     },
-    daily () {
+    daily() {
       return this.$store.state.weather.daily.data;
     }
   },
   methods: {
-    dayOfWeek (time, zone) {
+    dayOfWeek(time, zone) {
       return moment(time)
         .tz(zone)
         .format('ddd');

@@ -19,7 +19,7 @@
 export default {
   name: 'credits',
   computed: {
-    store () {
+    store() {
       return this.$store.state;
     }
   }
